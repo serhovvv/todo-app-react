@@ -1,28 +1,28 @@
 import { useState } from "react";
+import "./components/addTaskForm/AddTaskForm";
+import AddTaskForm from "./components/addTaskForm/AddTaskForm";
+import TaskItem from "./components/taskItem/TaskItem";
+import Modal from "./components/modal/Modal";
 
-function ToDo() {
+const ToDo = () => {
   const [tasks, setTasks] = useState([]);
   const [newTasks, setNewTasks] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
 
-  // function handleInputChange(e) {
-  //   setNewTasks(e.target.value);
-  // }
-
-  function AddTask() {
+  const AddTask = () => {
     if (newTasks.trim() !== "") {
       setTasks((t) => [...t, newTasks]);
       setNewTasks("");
     }
-  }
+  };
 
-  function askDelete(index) {
+  const askDelete = (index) => {
     setTaskToDelete(index);
     setShowConfirm(true);
-  }
+  };
 
-  function confirmDelete() {
+  const confirmDelete = () => {
     if (taskToDelete !== null) {
       const updatedTasks = [
         ...tasks.slice(0, taskToDelete),
@@ -32,14 +32,14 @@ function ToDo() {
       setShowConfirm(false);
       setTaskToDelete(null);
     }
-  }
+  };
 
-  function cancelDelete() {
+  const cancelDelete = () => {
     setShowConfirm(false);
     setTaskToDelete(null);
-  }
+  };
 
-  function moveTaskUp(index) {
+  const moveTaskUp = (index) => {
     if (index > 0) {
       const updatedTasks = [...tasks];
       [updatedTasks[index], updatedTasks[index - 1]] = [
@@ -48,9 +48,9 @@ function ToDo() {
       ];
       setTasks(updatedTasks);
     }
-  }
+  };
 
-  function moveTaskDown(index) {
+  const moveTaskDown = (index) => {
     if (index < tasks.length - 1) {
       const updatedTasks = [...tasks];
       [updatedTasks[index], updatedTasks[index + 1]] = [
@@ -59,73 +59,36 @@ function ToDo() {
       ];
       setTasks(updatedTasks);
     }
-  }
+  };
 
   return (
     <div className="wrapper">
       <div className="todo-list">
         <h1>ToDo-list</h1>
-        <div className="input-wrapper">
-          <input
-            type="text"
-            value={newTasks}
-            placeholder="Enter a task..."
-            onChange={(e) => setNewTasks(e.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                AddTask();
-              }
-            }}
-          />
-          <button className="add-button" onClick={AddTask}>
-            Add
-          </button>
-        </div>
+        <AddTaskForm
+          newTasks={newTasks}
+          setNewTasks={setNewTasks}
+          onAdd={AddTask}
+        />
 
         <ol>
           {tasks.map((task, index) => (
-            <li key={index}>
-              <span className="text">{task}</span>
-              <button
-                className="delete-button"
-                onClick={() => askDelete(index)}
-              >
-                Delete
-              </button>
-              <button className="move-button" onClick={() => moveTaskUp(index)}>
-                👆
-              </button>
-              <button
-                className="move-button"
-                onClick={() => moveTaskDown(index)}
-              >
-                👇
-              </button>
-            </li>
+            <TaskItem
+              task={task}
+              index={index}
+              askDelete={askDelete}
+              moveUp={moveTaskUp}
+              moveDown={moveTaskDown}
+            />
           ))}
         </ol>
 
         {showConfirm && (
-          <div className="modal-overlay">
-            <div className="modal">
-              <h1 className="modal-title">Delete task?</h1>
-              <span className="modal-span">
-                I hope you completed this task.
-              </span>
-              <div className="button-wrapper">
-                <button className="cancel-button" onClick={cancelDelete}>
-                  Cancel
-                </button>
-                <button className="confirm-button" onClick={confirmDelete}>
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
+          <Modal cancelDelete={cancelDelete} confirmDelete={confirmDelete} />
         )}
       </div>
     </div>
   );
-}
+};
 
 export default ToDo;
