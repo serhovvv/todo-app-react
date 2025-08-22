@@ -36,6 +36,7 @@ button {
   transition: background-color 0.5s ease;
 }
 .add-button {
+  border-radius: 0 5px 5px 0;
   background-color: hsl(125, 47%, 54%);
 }
 
@@ -64,7 +65,7 @@ input[type="text"] {
   font-size: 1.6rem;
   padding: 10px;
   border: 2px solid hsla(0, 0%, 80%, 0.5);
-  border-radius: 5px;
+  border-radius: 5px 0 0 5px ;
   color: hsla(0, 0%, 0%, 0.5);
 }
 ol{
@@ -83,7 +84,7 @@ li {
   border-radius: 5px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   
   
 }
@@ -136,4 +137,34 @@ li {
 .button-wrapper{
   display: flex;
   gap: 10px;
+}
+
+.checkbox{
+  padding-right: 10px;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.done{
+  text-decoration: line-through;
+}
+.filter-buttons{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.filter-buttons button{
+  background: #f0f0f0;
+  color: #9f9f9f;
+  font-size: 14px;
+  padding: 8px 16px;
+  
+}
+.filter-buttons button:hover {
+  background-color: #e0e0e0;
+}
+.filter-buttons button.active {
+  background-color: #4caf50;
+  color: white;
 }

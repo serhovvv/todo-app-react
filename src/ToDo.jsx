@@ -9,10 +9,15 @@ const ToDo = () => {
   const [newTasks, setNewTasks] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
+  const [filtered, setFiltered] = useState("all");
 
   const AddTask = () => {
     if (newTasks.trim() !== "") {
-      setTasks((t) => [...t, newTasks]);
+      const newObj = {
+        text: newTasks,
+        completed: false,
+      };
+      setTasks((t) => [...t, newObj]);
       setNewTasks("");
     }
   };
@@ -60,27 +65,63 @@ const ToDo = () => {
       setTasks(updatedTasks);
     }
   };
+  const toggleCheckbox = (index) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index].completed = !updatedTasks[index].completed;
+    setTasks(updatedTasks);
+  };
 
   return (
     <div className="wrapper">
       <div className="todo-list">
         <h1>ToDo-list</h1>
+
         <AddTaskForm
           newTasks={newTasks}
           setNewTasks={setNewTasks}
           onAdd={AddTask}
         />
-
+        <div className="filter-buttons">
+          <button
+            onClick={() => setFiltered("all")}
+            className={filtered === "all" ? "active" : ""}
+          >
+            All
+          </button>
+          <button
+            onClick={() => setFiltered("active")}
+            className={filtered === "active" ? "active" : ""}
+          >
+            Active
+          </button>
+          <button
+            onClick={() => setFiltered("completed")}
+            className={filtered === "completed" ? "active" : ""}
+          >
+            Completed
+          </button>
+        </div>
         <ol>
-          {tasks.map((task, index) => (
-            <TaskItem
-              task={task}
-              index={index}
-              askDelete={askDelete}
-              moveUp={moveTaskUp}
-              moveDown={moveTaskDown}
-            />
-          ))}
+          {tasks
+            .filter((t) => {
+              if (filtered === "active") {
+                return !t.completed;
+              } else if (filtered === "completed") {
+                return t.completed;
+              } else {
+                return true;
+              }
+            })
+            .map((task, index) => (
+              <TaskItem
+                task={task}
+                index={index}
+                askDelete={askDelete}
+                moveUp={moveTaskUp}
+                moveDown={moveTaskDown}
+                toggleCheckbox={toggleCheckbox}
+              />
+            ))}
         </ol>
 
         {showConfirm && (
