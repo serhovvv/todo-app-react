@@ -3,6 +3,7 @@ import "./components/addTaskForm/AddTaskForm";
 import AddTaskForm from "./components/addTaskForm/AddTaskForm";
 import TaskItem from "./components/taskItem/TaskItem";
 import Modal from "./components/modal/Modal";
+import ClearCompletedBtn from "./components/clearCompletedBtn/ClearCompletedBtn";
 
 const ToDo = () => {
   const [tasks, setTasks] = useState([]);
@@ -71,6 +72,11 @@ const ToDo = () => {
     setTasks(updatedTasks);
   };
 
+  const clearCompleted = () => {
+    const filterCompleted = tasks.filter((item) => !item.completed);
+    setTasks(filterCompleted);
+  };
+
   return (
     <div className="wrapper">
       <div className="todo-list">
@@ -102,6 +108,9 @@ const ToDo = () => {
           </button>
         </div>
         <ol>
+          {tasks.some((task) => task.completed) && filtered !== "active" && (
+            <ClearCompletedBtn functionCompleted={clearCompleted} />
+          )}
           {tasks
             .filter((t) => {
               if (filtered === "active") {

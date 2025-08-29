@@ -168,3 +168,15 @@ li {
   background-color: #4caf50;
   color: white;
 }
+.clear-completed-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 10px;
+}
+.clear-completed{
+  
+  font-size: 14px;
+  color: #9f9f9f;
+
+
+}
